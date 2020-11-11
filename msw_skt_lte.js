@@ -109,7 +109,8 @@ function runLib(obj_lib) {
             scripts_arr[0] = './' + config.directory_name + '/' + scripts_arr[0];
         }
 
-        var run_lib = spawn(scripts_arr[0], scripts_arr.slice(1));
+        // var run_lib = spawn(scripts_arr[0], scripts_arr.slice(1));
+        var run_lib = spawn('python3', ['./' + config.directory_name + '/lib_skt_lte.py', '/dev/ttyUSB1', 115200]);
 
         run_lib.stdout.on('data', function(data) {
             console.log('stdout: ' + data);
@@ -117,14 +118,20 @@ function runLib(obj_lib) {
 
         run_lib.stderr.on('data', function(data) {
             console.log('stderr: ' + data);
+
+            setTimeout(init, 1000);
         });
 
         run_lib.on('exit', function(code) {
             console.log('exit: ' + code);
+
+            setTimeout(init, 1000);
         });
 
         run_lib.on('error', function(code) {
             console.log('error: ' + code);
+
+            setTimeout(init, 1000);
         });
     }
     catch (e) {
@@ -208,7 +215,7 @@ function on_receive_from_muv(topic, str_message) {
 }
 
 function on_receive_from_lib(topic, str_message) {
-    // console.log('[' + topic + '] ' + str_message);
+    console.log('[' + topic + '] ' + str_message);
 
     parseDataMission(topic, str_message);
 }
